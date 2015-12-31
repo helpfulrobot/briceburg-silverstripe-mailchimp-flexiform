@@ -68,7 +68,6 @@ class FlexiFormMailChimpHandler extends FlexiFormEmailHandler
         $client = new FlexiFormMailChimpClient($flexi->FlexiFormSetting('MailChimpApiKey')->getValue());
 
         foreach ($this->stat('handler_settings') as $component => $class) {
-
             $field_name = $this->getSettingFieldName($component);
             $field = $this->augmentMailChimpField($settings_tab->fieldByName($field_name), $component, $client);
 
@@ -79,7 +78,6 @@ class FlexiFormMailChimpHandler extends FlexiFormEmailHandler
 
         // integrate list groups
         if ($list_id = $flexi->FlexiFormSetting('MailChimpListID')->getValue()) {
-
             $field = new CheckboxSetField('FlexiFormMailChimpGroups', 'List Groups');
 
             if ($list_groups = $this->getInterestGroups($list_id, $client)) {
@@ -123,14 +121,12 @@ class FlexiFormMailChimpHandler extends FlexiFormEmailHandler
         // calculate groups that need to be added to field list
         $new_groups = array_diff($requested_groups, $current_groups);
         if (! empty($new_groups)) {
-
             $client = new FlexiFormMailChimpClient($flexi->FlexiFormSetting('MailChimpApiKey')->getValue());
             $list_id = $flexi->FlexiFormSetting('MailChimpListID')->getValue();
             $groups = $this->getInterestGroups($list_id, $client);
 
             foreach ($new_groups as $group_id) {
                 if ($group = $groups->find('id', $group_id)) {
-
                     $options = array();
                     foreach ($group['groups'] as $option) {
                         // mailchimp subscribe API uses names vs. IDs...
@@ -202,7 +198,6 @@ class FlexiFormMailChimpHandler extends FlexiFormEmailHandler
                         'limit' => 100,
                         'sort_field' => 'web'
                     ))) {
-
                     $value = $field->Value();
                     $source = array(
                         '' => 'Please Select a List'
@@ -247,10 +242,9 @@ class FlexiFormMailChimpHandler extends FlexiFormEmailHandler
 
     // Submission Handling
     //////////////////////
-    public function onSubmit(Array $data, FlexiForm $form, SS_HTTPRequest $request, DataObject $flexi)
+    public function onSubmit(array $data, FlexiForm $form, SS_HTTPRequest $request, DataObject $flexi)
     {
         if ($return = parent::onSubmit($data, $form, $request, $flexi)) {
-
             $message = 'Skipped MailChimp Syncing';
 
             // @TODO asynchronous api calls
@@ -263,7 +257,6 @@ class FlexiFormMailChimpHandler extends FlexiFormEmailHandler
                     $flexi->FlexiFormSetting('MailChimpEmailField')
                         ->getValue())) {
                     if (isset($data[$email_field->SafeName()])) {
-
                         $params = array(
                             'id' => $list_id,
                             'email' => array(
@@ -278,7 +271,6 @@ class FlexiFormMailChimpHandler extends FlexiFormEmailHandler
                         foreach ($flexi->FlexiFormFields()->filter('ClassName',
                             'FlexiMailChimpInterestGroupField') as $group_field) {
                             if (isset($data[$group_field->SafeName()])) {
-
                                 $groupings[] = array(
                                     'id' => $group_field->InterestGroupID,
                                     'groups' => (array) $data[$group_field->SafeName()]

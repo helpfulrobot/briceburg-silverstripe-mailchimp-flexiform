@@ -33,7 +33,7 @@ class FlexiMailChimpInterestGroupField extends FlexiFormOptionField
                 break;
         }
 
-        $this->set_stat('field_class',$class);
+        $this->set_stat('field_class', $class);
 
         return parent::getFormField($title, $value, $required);
     }

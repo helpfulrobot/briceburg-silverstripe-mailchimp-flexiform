@@ -46,7 +46,7 @@ class FlexiFormMailChimpClient
                     $method
                 ), $arguments);
         } catch (Exception $e) {
-            if(Director::isDev() && $this->debug_exceptions) {
+            if (Director::isDev() && $this->debug_exceptions) {
                 var_dump($e);
             }
             $result = false;
